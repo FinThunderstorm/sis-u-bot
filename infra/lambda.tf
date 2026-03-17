@@ -8,7 +8,7 @@ resource "aws_lambda_function" "api" {
   role             = aws_iam_role.lambda_exec.arn
   handler          = "Sisubot::handler"
   runtime          = "java25"
-  memory_size      = "512m"
+  memory_size      = 512
   source_code_hash = base64sha256(filebase64(local.lambda_payload_filename))
 
   tags = {
