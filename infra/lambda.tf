@@ -23,7 +23,7 @@ resource "aws_lambda_function_url" "api" {
 
   cors {
     allow_credentials = true
-    allow_origins     = ["https://sis-u-bot.alanen.dev"]
+    allow_origins     = ["https://${var.domain_name}"]
     allow_methods     = ["POST"]
     allow_headers     = ["date", "keep-alive"]
     expose_headers    = ["keep-alive", "date"]
@@ -52,6 +52,27 @@ resource "aws_cloudfront_distribution" "api" {
   }
 
   aliases = [var.api_domain_name]
+
+  default_cache_behavior {
+    allowed_methods = ["POST", "HEAD"]
+    cached_methods  = ["POST", "HEAD"]
+
+    target_origin_id = local.api_origin_id
+
+    forwarded_values {
+      query_string = false
+
+      cookies {
+        forward = "none"
+      }
+    }
+
+    min_ttl                = 0
+    default_ttl            = 3600
+    max_ttl                = 86400
+    compress               = true
+    viewer_protocol_policy = "redirect-to-https"
+  }
 
   restrictions {
     geo_restriction {
