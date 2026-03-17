@@ -39,6 +39,15 @@ resource "aws_cloudfront_distribution" "api" {
   origin {
     domain_name = aws_lambda_function_url.api.function_url
     origin_id   = local.api_origin_id
+
+    custom_origin_config {
+      http_port                = 80
+      https_port               = 443
+      origin_protocol_policy   = "https-only"
+      origin_ssl_protocols     = ["TLSv1.2"]
+      origin_keepalive_timeout = 5
+      origin_read_timeout      = 30
+    }
   }
 
   enabled             = true
