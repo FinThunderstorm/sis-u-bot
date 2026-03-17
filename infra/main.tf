@@ -159,7 +159,7 @@ resource "aws_cloudfront_distribution" "app" {
   }
 
   viewer_certificate {
-    acm_certificate_arn            = aws_acm_certificate.alanendev.arn
+    acm_certificate_arn            = aws_acm_certificate.app.arn
     cloudfront_default_certificate = false
     minimum_protocol_version       = "TLSv1.2_2018"
     ssl_support_method             = "sni-only"

@@ -30,3 +30,45 @@ resource "aws_lambda_function_url" "api" {
     max_age           = 86400
   }
 }
+
+locals {
+  api_origin_id = "api-sisubot-alanendev-origin-id"
+}
+
+resource "aws_cloudfront_distribution" "api" {
+  origin {
+    domain_name = aws_lambda_function_url.api.function_url
+    origin_id   = local.api_origin_id
+  }
+
+  enabled             = true
+  is_ipv6_enabled     = true
+  comment             = "api-sisubot-alanendev"
+
+  logging_config {
+    include_cookies = false
+    bucket          = aws_s3_bucket.logs.bucket_domain_name
+    prefix          = "api-sisubot-alanendev-cf"
+  }
+
+  aliases = [var.api_domain_name]
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "blacklist"
+      locations        = ["RU", "CN"]
+    }
+  }
+
+  tags = {
+    Environment = "production"
+    Name        = "api-sisubot-alanendev-cf"
+  }
+
+  viewer_certificate {
+    acm_certificate_arn            = aws_acm_certificate.api.arn
+    cloudfront_default_certificate = false
+    minimum_protocol_version       = "TLSv1.2_2018"
+    ssl_support_method             = "sni-only"
+  }
+}
