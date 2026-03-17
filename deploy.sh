@@ -16,9 +16,13 @@ function main {
   popd
   echo ::endgroup::
 
-  echo ::group::Build the application
+  echo ::group::Build the frontend
   npm_ci
   npm run build
+  echo ::endgroup::
+
+  echo ::group::Build the API
+  build_api
   echo ::endgroup::
 
   echo ::group::Deploy the application

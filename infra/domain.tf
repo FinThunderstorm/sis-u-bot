@@ -36,3 +36,11 @@ resource "cloudflare_record" "sisubot" {
   type    = "CNAME"
   proxied = false
 }
+
+resource "cloudflare_record" "sisubot_api" {
+  zone_id = data.cloudflare_zone.alanendev.id
+  name    = "api.sis-u-bot"
+  value   = aws_lambda_function_url.api.function_url
+  type    = "CNAME"
+  proxied = false
+}

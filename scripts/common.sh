@@ -59,6 +59,15 @@ function npm_ci() {
     popd
 }
 
+function build_api() {
+      pushd "$repository/api"
+
+      echo "::debug::Build app"
+      bash "$repository/scripts/lein" uberjar
+
+      popd
+}
+
 function get_environment_variables() {
     if [[ "$ENV" == "dev" ]]
     then
