@@ -1,16 +1,16 @@
 resource "aws_s3_bucket" "app" {
-  bucket = "sisubot-alanendev-bucket"
+  bucket = "${var.domain_name}-${var.base_domain_name}-bucket"
   tags = {
-    Environment = "production"
-    Name        = "sisubot-alanendev-bucket"
+    Environment = var.environment
+    Name        = "${var.domain_name}-${var.base_domain_name}-bucket"
   }
 }
 
 resource "aws_s3_bucket" "logs" {
-  bucket = "sisubot-alanendev-logs-bucket"
+  bucket = "${var.domain_name}-${var.base_domain_name}-cf-logs-bucket"
   tags = {
-    Environment = "production"
-    Name        = "sisubot-cf-logs"
+    Environment = var.environment
+    Name        = "${var.domain_name}-${var.base_domain_name}-cf-logs-bucket"
   }
 }
 

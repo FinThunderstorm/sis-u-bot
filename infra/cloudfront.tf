@@ -1,7 +1,7 @@
 
 locals {
-  api_origin_id = "api-sisubot-alanendev-origin-id"
-  s3_origin_id = "sisubot-alanendev-bucket-origin-id"
+  api_origin_id = "${var.api_domain_name}-${var.base_domain_name}-origin-id"
+  s3_origin_id = "${var.domain_name}-${var.base_domain_name}-origin-id"
 }
 
 resource "aws_cloudfront_origin_access_identity" "app" {
@@ -20,13 +20,13 @@ resource "aws_cloudfront_distribution" "app" {
 
   enabled             = true
   is_ipv6_enabled     = true
-  comment             = "sisubot-alanendev"
+  comment             = "${var.domain_name}-${var.base_domain_name}"
   default_root_object = "index.html"
 
   logging_config {
     include_cookies = false
     bucket          = aws_s3_bucket.logs.bucket_domain_name
-    prefix          = "sisubot-alanendev-cf"
+    prefix          = "${var.domain_name}-${var.base_domain_name}-cf"
   }
 
   aliases = ["${var.domain_name}.${var.base_domain_name}"]
@@ -60,8 +60,8 @@ resource "aws_cloudfront_distribution" "app" {
   }
 
   tags = {
-    Environment = "production"
-    Name        = "sisubot-alanendev-cf"
+    Environment = var.environment
+    Name        = "${var.domain_name}-${var.base_domain_name}-cf"
   }
 
   viewer_certificate {
@@ -89,12 +89,12 @@ resource "aws_cloudfront_distribution" "api" {
 
   enabled             = true
   is_ipv6_enabled     = true
-  comment             = "api-sisubot-alanendev"
+  comment             = "${var.api_domain_name}-${var.base_domain_name}"
 
   logging_config {
     include_cookies = false
     bucket          = aws_s3_bucket.logs.bucket_domain_name
-    prefix          = "api-sisubot-alanendev-cf"
+    prefix          = "${var.api_domain_name}-${var.base_domain_name}-cf"
   }
 
   aliases = ["${var.api_domain_name}.${var.base_domain_name}"]
@@ -128,8 +128,8 @@ resource "aws_cloudfront_distribution" "api" {
   }
 
   tags = {
-    Environment = "production"
-    Name        = "api-sisubot-alanendev-cf"
+    Environment = var.environment
+    Name        = "${var.api_domain_name}-${var.base_domain_name}-cf"
   }
 
   viewer_certificate {

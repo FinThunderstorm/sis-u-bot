@@ -12,7 +12,7 @@ resource "aws_lambda_function" "api" {
   source_code_hash = base64sha256(filebase64(local.lambda_payload_filename))
 
   tags = {
-    Environment = "production"
+    Environment = var.environment
     Name        = "sis-u-bot-api"
   }
 }
