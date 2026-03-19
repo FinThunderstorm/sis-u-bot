@@ -5,7 +5,7 @@ data "aws_iam_policy_document" "s3_policy" {
 
     principals {
       type        = "AWS"
-      identifiers = [aws_cloudfront_origin_access_identity.origin_access_identity.iam_arn]
+      identifiers = [aws_cloudfront_origin_access_identity.app.iam_arn]
     }
   }
 }
