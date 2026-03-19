@@ -17,7 +17,7 @@
            |Software Engineering Models and Modeling  |CT60A5103  |6      |5    |
            |Foundations of Software Product Management|CT70A6201  |6      |4    |
            |Requirements Engineering                  |CT70A2000  |6      |5    |
-           """ "unknown"
+           """ "I did not understand your question, please rephrase and try again."
              ))
     )
   )
