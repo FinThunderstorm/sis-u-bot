@@ -37,7 +37,7 @@ locals {
 
 resource "aws_cloudfront_distribution" "api" {
   origin {
-    domain_name = aws_lambda_function_url.api.function_url
+    domain_name = "${aws_lambda_function_url.api.url_id}.lambda-url.${var.aws_region}.on.aws"
     origin_id   = local.api_origin_id
 
     custom_origin_config {
@@ -101,6 +101,10 @@ resource "aws_cloudfront_distribution" "api" {
     minimum_protocol_version       = "TLSv1.2_2018"
     ssl_support_method             = "sni-only"
   }
+}
+
+output "fixed_function_url" {
+  value = "${aws_lambda_function_url.api.url_id}.lambda-url.${var.aws_region}.on.aws"
 }
 
 output "function_url" {
