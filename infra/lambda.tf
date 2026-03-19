@@ -102,3 +102,11 @@ resource "aws_cloudfront_distribution" "api" {
     ssl_support_method             = "sni-only"
   }
 }
+
+output "function_url" {
+  value = aws_lambda_function_url.api.function_url
+}
+
+output "bucket_regional_domain_name" {
+  value = aws_s3_bucket.app.bucket_regional_domain_name
+}
