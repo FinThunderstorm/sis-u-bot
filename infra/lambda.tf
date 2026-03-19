@@ -64,7 +64,7 @@ resource "aws_cloudfront_distribution" "api" {
 
   default_cache_behavior {
     allowed_methods = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
-    cached_methods  = []
+    cached_methods  = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
 
     target_origin_id = local.api_origin_id
 
