@@ -63,8 +63,8 @@ resource "aws_cloudfront_distribution" "api" {
   aliases = [var.api_domain_name]
 
   default_cache_behavior {
-    allowed_methods = ["POST", "HEAD"]
-    cached_methods  = ["POST", "HEAD"]
+    allowed_methods = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
+    cached_methods  = []
 
     target_origin_id = local.api_origin_id
 
