@@ -1,16 +1,8 @@
 resource "aws_s3_bucket" "app" {
-  bucket = "${var.domain_name}-${var.base_domain_name}-bucket"
+  bucket = "${var.domain_name}.${var.base_domain_name}-bucket"
   tags = {
     Environment = var.environment
-    Name        = "${var.domain_name}-${var.base_domain_name}-bucket"
-  }
-}
-
-resource "aws_s3_bucket" "logs" {
-  bucket = "${var.domain_name}-${var.base_domain_name}-cf-logs-bucket"
-  tags = {
-    Environment = var.environment
-    Name        = "${var.domain_name}-${var.base_domain_name}-cf-logs-bucket"
+    Name        = "${var.domain_name}.${var.base_domain_name}-bucket"
   }
 }
 
@@ -21,24 +13,10 @@ resource "aws_s3_bucket_ownership_controls" "app" {
   }
 }
 
-resource "aws_s3_bucket_ownership_controls" "logs" {
-  bucket = aws_s3_bucket.logs.id
-  rule {
-    object_ownership = "BucketOwnerPreferred"
-  }
-}
-
 resource "aws_s3_bucket_acl" "app" {
   depends_on = [aws_s3_bucket_ownership_controls.app]
 
   bucket = aws_s3_bucket.app.id
-  acl    = "private"
-}
-
-resource "aws_s3_bucket_acl" "logs" {
-  depends_on = [aws_s3_bucket_ownership_controls.logs]
-
-  bucket = aws_s3_bucket.logs.id
   acl    = "private"
 }
 
@@ -59,4 +37,26 @@ resource "aws_s3_bucket_versioning" "app_versioning" {
   versioning_configuration {
     status = "Enabled"
   }
+}
+
+resource "aws_s3_bucket" "logs" {
+  bucket = "${var.domain_name}.${var.base_domain_name}-cf-logs-bucket"
+  tags = {
+    Environment = var.environment
+    Name        = "${var.domain_name}.${var.base_domain_name}-cf-logs-bucket"
+  }
+}
+
+resource "aws_s3_bucket_ownership_controls" "logs" {
+  bucket = aws_s3_bucket.logs.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_acl" "logs" {
+  depends_on = [aws_s3_bucket_ownership_controls.logs]
+
+  bucket = aws_s3_bucket.logs.id
+  acl    = "private"
 }
