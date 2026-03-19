@@ -1,10 +1,10 @@
 data "cloudflare_zone" "alanendev" {
-  name = "alanen.dev"
+  name = var.base_domain_name
 }
 
 resource "aws_acm_certificate" "app" {
   provider          = aws.acm
-  domain_name       = var.domain_name
+  domain_name       = "${var.domain_name}.${var.base_domain_name}"
   validation_method = "DNS"
   lifecycle {
     create_before_destroy = true
@@ -13,7 +13,7 @@ resource "aws_acm_certificate" "app" {
 
 resource "aws_acm_certificate" "api" {
   provider          = aws.acm
-  domain_name       = var.api_domain_name
+  domain_name       = "${var.api_domain_name}.${var.base_domain_name}"
   validation_method = "DNS"
   lifecycle {
     create_before_destroy = true

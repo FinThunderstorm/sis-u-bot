@@ -23,7 +23,7 @@ resource "aws_lambda_function_url" "api" {
 
   cors {
     allow_credentials = true
-    allow_origins     = ["https://${var.domain_name}"]
+    allow_origins     = ["https://${var.domain_name}.${var.base_domain_name}"]
     allow_methods     = ["POST"]
     allow_headers     = ["date", "keep-alive"]
     expose_headers    = ["keep-alive", "date"]
@@ -60,7 +60,7 @@ resource "aws_cloudfront_distribution" "api" {
     prefix          = "api-sisubot-alanendev-cf"
   }
 
-  aliases = [var.api_domain_name]
+  aliases = ["${var.api_domain_name}.${var.base_domain_name}"]
 
   default_cache_behavior {
     allowed_methods = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]

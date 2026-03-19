@@ -99,7 +99,7 @@ locals {
 }
 
 resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
-  comment = var.domain_name
+  comment = "${var.domain_name}.${var.base_domain_name}"
 }
 
 resource "aws_cloudfront_distribution" "app" {
@@ -123,7 +123,7 @@ resource "aws_cloudfront_distribution" "app" {
     prefix          = "sisubot-alanendev-cf"
   }
 
-  aliases = [var.domain_name]
+  aliases = ["${var.domain_name}.${var.base_domain_name}"]
 
   default_cache_behavior {
     allowed_methods = ["GET", "HEAD"]
