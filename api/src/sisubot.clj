@@ -35,7 +35,7 @@
   (str "I did not understand your question, please rephrase your question and try again."))
 
 (defn generate-answer [question]
-  (if (re-find #"slow") (Thread/sleep 3000))
+  (if (re-find #"slow" question) (Thread/sleep 2000))
   (if (re-find #"courses" question)
     (map-answer-body (generate-courses-answer) true)
     (if (re-find #"where" question)
