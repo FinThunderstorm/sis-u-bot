@@ -24,3 +24,32 @@ body {
     color: var(--foreground);
     font-family: Arial, Helvetica, sans-serif;
 }
+
+
+.layout {
+    display: grid;
+    grid-template-columns: [begin content-start] auto [content-end end];
+    grid-template-rows: [begin content-start] auto [content-end end];
+    column-gap: theme('spacing.16');
+    height: 100dvh;
+}
+
+.chatbox-layout {
+    height: inherit;
+    grid-column: content-start / content-end;
+    grid-row: content-start / content-end;
+    display: grid;
+    grid-template-columns: [begin messages-start input-start] auto [messages-end input-end end];
+    grid-template-rows: [begin messages-start] auto [messages-end input-start] min-content [input-end end];
+}
+
+.chatbox-messages {
+    grid-column: messages-start / messages-end;
+    grid-row: messages-start / messages-end;
+    overflow: auto;
+}
+
+.chatbox-input {
+    grid-column: input-start / input-end;
+    grid-row: input-start / input-end;
+}

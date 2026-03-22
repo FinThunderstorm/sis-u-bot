@@ -59,7 +59,7 @@ const Circle = () => (
 
 const ChatMessage = ({message: m, loading}: { message: Message, loading?: boolean }) => {
     return <div
-        className={`${m.actor === "user" ? "self-end bg-cyan-100 p-4 rounded-lg" : "self-start bg-gray-100 p-4 rounded-lg"}`}
+        className={`${m.actor === "user" ? "self-end bg-cyan-100" : "self-start bg-gray-100"} p-4 rounded-lg`}
     >
         <div className="flex flex-row gap-8 items-center">
             {m.actor === "bot" &&
@@ -116,29 +116,30 @@ const Page = () => {
     }
 
     return (
-        <div className="flex min-h-screen justify-center items-center">
-            <div className="flex flex-col gap-2 bg-white text-black min-w-1/2 min-h-1/2 p-2">
-                <div className="flex flex-col gap-2 px-4 py-2 overflow-auto">
+        <div className="layout">
+            <div className="chatbox-layout bg-white text-black p-2">
+                <div className="chatbox-messages flex flex-col gap-2 px-4 py-2 overflow-auto h-full">
                     {messages.map((m, i) => (
                         <ChatMessage message={m} key={`message-${i}`}/>
                     ))}
                     {loading && <ChatMessage message={{actor: "bot", message: ""}} loading={true}/>}
                 </div>
-                <div className="flex flex-row gap-2 p-2 items-start">
-                    <div className="flex flex-col w-full"><input
-                        placeholder="Type your question here"
-                        value={message}
-                        onChange={(e) => {
-                            setError("")
-                            setMessage(e.target.value)
-                        }}
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                                handleAsk()
-                            }
-                        }}
-                        className={`p-2 border-3 ${error ? "border-orange-600" : "border-blue-700"} rounded-lg`}
-                    />
+                <div className="chatbox-input flex flex-row gap-2 p-2 items-start">
+                    <div className="flex flex-col w-full">
+                        <input
+                            placeholder="Type your question here"
+                            value={message}
+                            onChange={(e) => {
+                                setError("")
+                                setMessage(e.target.value)
+                            }}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    handleAsk()
+                                }
+                            }}
+                            className={`p-2 border-3 ${error ? "border-orange-600" : "border-blue-700"} rounded-lg`}
+                        />
                         {error && <span className="text-orange-600 text-sm px-2">{error}</span>}
                     </div>
                     <button
