@@ -1,7 +1,8 @@
 (ns sisubot
   (:gen-class
    :methods [^:static [handler [String] String]])
-  (:require [clojure.pprint :refer [pprint]]))
+  (:require [clojure.pprint :refer [pprint]])
+  (:require [clojure.data.json :as json]))
 
 (defn generate-courses-answer []
   (str """Based on your previous completed courses, I suggest you take following course:
@@ -42,7 +43,7 @@
 
 (defn -handler [this event]
   (pprint event)
-  (json/write-str (generate-answer (.getBody event)))
+  (json/write-str {:answer (generate-answer (.getBody event))})
   )
 
 (gen-class
