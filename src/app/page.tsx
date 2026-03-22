@@ -15,38 +15,38 @@ const startMessages: Message[] = [
         actor: "bot",
         message: "How I can help you today?",
     },
-    {
-        actor: "user",
-        message: "courses",
-    },
-    {
-        actor: "bot",
-        message: "Based on your previous completed courses, I suggest you take following course:\n\n |Course |Course code|Credits|\n |------------------------------------------|-----------|-------|\n |Digital Transformation Management |YY00BW98 |5 |\n ",
-    },
-    {
-        actor: "user",
-        message: "where",
-    },
-    {
-        actor: "bot",
-        message: "You can find your student number from `My profile > Personal information`",
-    },
-    {
-        actor: "user",
-        message: "evaluated",
-    },
-    {
-        actor: "bot",
-        message: "You have got following evaluations in last 30 days:\n\n |Course                                    |Course code|Credits|Grade|\n |------------------------------------------|-----------|-------|-----|\n |Software Engineering Models and Modeling  |CT60A5103  |6      |5    |\n |Foundations of Software Product Management|CT70A6201  |6      |4    |\n  |Requirements Engineering                  |CT70A2000  |6      |5    |\n ",
-    },
-    {
-        actor: "user",
-        message: "unknown",
-    },
-    {
-        actor: "bot",
-        message: "I did not understand your question, please rephrase your question and try again.",
-    },
+    // {
+    //     actor: "user",
+    //     message: "courses",
+    // },
+    // {
+    //     actor: "bot",
+    //     message: "Based on your previous completed courses, I suggest you take following course:\n\n |Course |Course code|Credits|\n |------------------------------------------|-----------|-------|\n |Digital Transformation Management |YY00BW98 |5 |\n ",
+    // },
+    // {
+    //     actor: "user",
+    //     message: "where",
+    // },
+    // {
+    //     actor: "bot",
+    //     message: "You can find your student number from `My profile > Personal information`",
+    // },
+    // {
+    //     actor: "user",
+    //     message: "evaluated",
+    // },
+    // {
+    //     actor: "bot",
+    //     message: "You have got following evaluations in last 30 days:\n\n |Course                                    |Course code|Credits|Grade|\n |------------------------------------------|-----------|-------|-----|\n |Software Engineering Models and Modeling  |CT60A5103  |6      |5    |\n |Foundations of Software Product Management|CT70A6201  |6      |4    |\n  |Requirements Engineering                  |CT70A2000  |6      |5    |\n ",
+    // },
+    // {
+    //     actor: "user",
+    //     message: "unknown",
+    // },
+    // {
+    //     actor: "bot",
+    //     message: "I did not understand your question, please rephrase your question and try again.",
+    // },
 ] as const
 
 const Circle = () => (
