@@ -4,6 +4,7 @@
     --background: #ffffff;
     --foreground: #171717;
     --header-height: calc(var(--text-xl) + 1rem);
+    --message-width: 90dvw;
 }
 
 @theme inline {
