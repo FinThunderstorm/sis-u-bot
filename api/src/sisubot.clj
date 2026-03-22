@@ -42,7 +42,7 @@
 
 (defn -handler [this event]
   (pprint event)
-  (generate-answer (.getBody event))
+  (json/write-str (generate-answer (.getBody event)))
   )
 
 (gen-class
