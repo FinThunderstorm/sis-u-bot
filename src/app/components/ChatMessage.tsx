@@ -9,9 +9,11 @@ export const ChatMessage = ({message: m, loading}: { message: Message, loading?:
         className={`${m.actor === "user" ? "self-end bg-cyan-100 ps-4 pe-2" : "self-start bg-gray-100 ps-2 pe-4"} py-4 rounded-lg max-w-(--message-width) shrink-0 overflow-y-auto`}
     >
         <div className="flex flex-row gap-3 items-center">
+            <span className="sr-only">{m.actor === "bot" ? "Bot answers" : "User asks"}</span>
             {m.actor === "bot" &&
                 <AcademicCapIcon
-                    className="h-[40px] w-[40px] bg-white fill-black shrink-0 p-1.5 rounded-full self-start"/>}
+                    className="h-[40px] w-[40px] bg-white fill-black shrink-0 p-1.5 rounded-full self-start"/>
+            }
             {loading && <Loading/>}
             {m.actor === "user" ? <span>{m.message}</span> :
                 <div className="flex flex-col gap-4">
@@ -30,7 +32,8 @@ export const ChatMessage = ({message: m, loading}: { message: Message, loading?:
                         }
                     }}>{m.message}</Markdown></div>}
             {m.actor === "user" &&
-                <UserIcon className="h-[40px] w-[40px] bg-white fill-black shrink-0 p-1.5 rounded-full self-end"/>}
+                <UserIcon className="h-[40px] w-[40px] bg-white fill-black shrink-0 p-1.5 rounded-full self-end"/>
+            }
         </div>
     </section>
 }
