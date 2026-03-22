@@ -1,6 +1,8 @@
 "use client"
 import {useState} from "react"
 import Markdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import {AcademicCapIcon, UserIcon} from "@heroicons/react/24/solid";
 import {ask} from "@/app/service/chatService";
 
 type Message = {
@@ -13,30 +15,87 @@ const startMessages: Message[] = [
         actor: "bot",
         message: "How I can help you today?",
     },
-    // {
-    //     actor: "user",
-    //     message: "Can you help me find courses related to leadership?",
-    // },
-    // {
-    //     actor: "bot",
-    //     message: "I found four relevant courses to [your](https://google.com) question.",
-    // },
+    {
+        actor: "user",
+        message: "courses",
+    },
+    {
+        actor: "bot",
+        message: "Based on your previous completed courses, I suggest you take following course:\n\n |Course |Course code|Credits|\n |------------------------------------------|-----------|-------|\n |Digital Transformation Management |YY00BW98 |5 |\n ",
+    },
+    {
+        actor: "user",
+        message: "where",
+    },
+    {
+        actor: "bot",
+        message: "You can find your student number from `My profile > Personal information`",
+    },
+    {
+        actor: "user",
+        message: "evaluated",
+    },
+    {
+        actor: "bot",
+        message: "You have got following evaluations in last 30 days:\n\n |Course                                    |Course code|Credits|Grade|\n |------------------------------------------|-----------|-------|-----|\n |Software Engineering Models and Modeling  |CT60A5103  |6      |5    |\n |Foundations of Software Product Management|CT70A6201  |6      |4    |\n  |Requirements Engineering                  |CT70A2000  |6      |5    |\n ",
+    },
+    {
+        actor: "user",
+        message: "unknown",
+    },
+    {
+        actor: "bot",
+        message: "I did not understand your question, please rephrase your question and try again.",
+    },
 ] as const
 
 const Page = () => {
     const [message, setMessage] = useState<string>("")
+    const [loading, setLoading] = useState<boolean>(false)
     const [messages, setMessages] = useState<Message[]>(startMessages)
+
+    const handleAsk = async (): Promise<void> => {
+        setMessages((prevMessages) => [...prevMessages, {actor: "user", message: message}])
+        setLoading(true)
+        const response = await ask(message)
+        setMessages((prevMessages) => [...prevMessages, {actor: "bot", message: response.answer}])
+        if (response.success) {
+            setMessage("")
+        }
+        setLoading(false)
+    }
 
     return (
         <div className="flex min-h-screen justify-center items-center">
-            <div className="flex flex-col gap-2 bg-white text-black min-w-1/2 min-h-1/2">
-                <div className="flex flex-col gap-2 px-4 py-2">
+            <div className="flex flex-col gap-2 bg-white text-black min-w-1/2 min-h-1/2 max-h-full">
+                <div className="flex flex-col gap-2 px-4 py-2 overflow-auto">
                     {messages.map((m, i) => (
                         <div
                             key={`message-${i}`}
-                            className={`${m.actor === "user" ? "self-end" : "self-start"}`}
+                            className={`${m.actor === "user" ? "self-end bg-cyan-100 p-4 rounded-lg" : "self-start bg-gray-200 p-4 rounded-lg"}`}
                         >
-                            {m.actor === "user" ? <span>{m.message}</span> : <Markdown>{m.message}</Markdown>}
+                            <div className="flex flex-row gap-8 items-center">
+                                {m.actor === "bot" &&
+                                    <AcademicCapIcon className="h-12 bg-white p-2 rounded-full self-start"/>}
+                                {m.actor === "user" ? <span>{m.message}</span> :
+                                    <div className="flex flex-col gap-4">
+                                        <Markdown remarkPlugins={[remarkGfm]} components={{
+                                            table(props) {
+                                                const {node, children, ...rest} = props
+                                                return <table className="table-auto border" {...rest}>{children}</table>
+                                            },
+                                            th(props) {
+                                                const {node, children, ...rest} = props
+                                                return <th className="border px-4 py-2" {...rest}>{children}</th>
+                                            },
+                                            td(props) {
+                                                const {node, children, ...rest} = props
+                                                return <td className="border px-4 py-2" {...rest}>{children}</td>
+                                            }
+                                        }}>{m.message}</Markdown></div>}
+                                {m.actor === "user" &&
+                                    <UserIcon className="h-12 bg-white p-2 rounded-full self-start"/>}
+                            </div>
                         </div>
                     ))}
                 </div>
@@ -45,18 +104,18 @@ const Page = () => {
                         placeholder="Type here"
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        className="w-full p-2"
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                handleAsk()
+                            }
+                        }}
+                        className="w-full p-2 border-cyan-400"
                     />
                     <button
-                        className="p-2"
-                        onClick={() => {
-                            ask(message).then(r => {
-                                alert(r.answer)
-                                setMessages((prevMessages) => [...prevMessages, {actor: "user", message: message}, {actor: "bot", message: r.answer}])
-                            })
-                        }}
+                        className="p-2 "
+                        onClick={handleAsk}
                     >
-                        send
+                        {loading ? "loading" : "send"}
                     </button>
                 </div>
             </div>

@@ -1,7 +1,6 @@
 package sisubot;
 
 public class HttpEvent {
-
     private String body;
 
     public void setBody(String body) {
