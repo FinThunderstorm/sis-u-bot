@@ -4,27 +4,28 @@ import Markdown from 'react-markdown'
 import {ask} from "@/app/service/chatService";
 
 type Message = {
-    actor: string
+    actor: "user" | "bot"
     message: string
 }
 
+const startMessages: Message[] = [
+    {
+        actor: "bot",
+        message: "How I can help you today?",
+    },
+    // {
+    //     actor: "user",
+    //     message: "Can you help me find courses related to leadership?",
+    // },
+    // {
+    //     actor: "bot",
+    //     message: "I found four relevant courses to [your](https://google.com) question.",
+    // },
+] as const
+
 const Page = () => {
     const [message, setMessage] = useState<string>("")
-
-    const messages: Message[] = [
-        {
-            actor: "bot",
-            message: "How I can help you today?",
-        },
-        // {
-        //     actor: "user",
-        //     message: "Can you help me find courses related to leadership?",
-        // },
-        // {
-        //     actor: "bot",
-        //     message: "I found four relevant courses to [your](https://google.com) question.",
-        // },
-    ]
+    const [messages, setMessages] = useState<Message[]>(startMessages)
 
     return (
         <div className="flex min-h-screen justify-center items-center">
@@ -49,7 +50,10 @@ const Page = () => {
                     <button
                         className="p-2"
                         onClick={() => {
-                            ask(message).then(r => alert(r))
+                            ask(message).then(r => {
+                                alert(r.answer)
+                                setMessages((prevMessages) => [...prevMessages, {actor: "user", message: message}, {actor: "bot", message: r.answer}])
+                            })
                         }}
                     >
                         send
