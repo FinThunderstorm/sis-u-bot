@@ -2,7 +2,6 @@
 set -o errexit -o nounset -o pipefail
 
 readonly ENV="prod"
-
 source "$( dirname "${BASH_SOURCE[0]}" )/scripts/common.sh"
 
 function main {
@@ -16,14 +15,8 @@ function main {
   popd
   echo ::endgroup::
 
-  echo ::group::Build the frontend
-  npm_ci
-  npm run build
-  echo ::endgroup::
-
-  echo ::group::Build the API
+  build_app
   build_api
-  echo ::endgroup::
 
   echo ::group::Deploy the application
   pushd "$repository/infra"

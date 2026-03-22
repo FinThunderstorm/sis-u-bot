@@ -3,6 +3,7 @@
 :root {
     --background: #ffffff;
     --foreground: #171717;
+    --header-height: 3dvh;
 }
 
 @theme inline {
@@ -28,19 +29,24 @@ body {
 
 .layout {
     display: grid;
-    grid-template-columns: [begin content-start] auto [content-end end];
-    grid-template-rows: [begin content-start] auto [content-end end];
-    column-gap: theme('spacing.16');
+    grid-template-columns: [begin header-start content-start] auto [header-end content-end end];
+    grid-template-rows: [begin header-start] min-content [header-end content-start] auto [content-end end];
     height: 100dvh;
 }
 
+.chatbox-header {
+    height: var(--header-height);
+    grid-column: header-start / header-end;
+    grid-row: header-start / header-end;
+}
+
 .chatbox-layout {
-    height: inherit;
+    height: calc(100dvh - var(--header-height));
     grid-column: content-start / content-end;
     grid-row: content-start / content-end;
     display: grid;
-    grid-template-columns: [begin messages-start input-start] auto [messages-end input-end end];
-    grid-template-rows: [begin messages-start] auto [messages-end input-start] min-content [input-end end];
+    grid-template-columns: [begin header-start messages-start input-start] auto [header-end messages-end input-end end];
+    grid-template-rows: [begin header-start] min-content [header-end messages-start] auto [messages-end input-start] min-content [input-end end];
 }
 
 .chatbox-messages {

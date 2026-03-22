@@ -59,13 +59,26 @@ function npm_ci() {
     popd
 }
 
+function build_app() {
+    echo ::group::Build the frontend
+    pushd "$repository"
+
+    npm_ci
+    npm run build
+
+    popd
+    echo ::endgroup::
+}
+
 function build_api() {
-      pushd "$repository/api"
+    echo ::group::Build the API
+    pushd "$repository/api"
 
-      echo "::debug::Build app"
-      bash "$repository/scripts/lein" uberjar
+    echo "::debug::Build app"
+    bash "$repository/scripts/lein" uberjar
 
-      popd
+    popd
+    echo ::endgroup::
 }
 
 function get_environment_variables() {
@@ -73,6 +86,11 @@ function get_environment_variables() {
     then
         export APP_ENV="development"
         export NODE_ENV="development"
+        export PORT="3100"
+    elif [ "$ENV" == "test" ]; then
+        export APP_ENV="production"
+        export NODE_ENV="production"
+        export PORT="3101"
     else
         export APP_ENV="production"
         export NODE_ENV="production"

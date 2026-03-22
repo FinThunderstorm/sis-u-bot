@@ -12,8 +12,29 @@ env:
   TZ: "Europe/Helsinki"
 
 jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        shards: [ 1, 2, 3, 4, 5 ]
+        total_shards: [ 5 ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+      - name: Run tests
+        run: ./run-tests.sh
+        env:
+          PLAYWRIGHT_SHARD: ${{ matrix.shards }}
+          PLAYWRIGHT_TOTAL_SHARDS: ${{ matrix.total_shards }}
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v7.0.0
+        with:
+          name: test-results-${{ matrix.shards }}
+          path: test-results
   deploy:
     if: github.ref == 'refs/heads/master'
+    needs: [ test ]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
