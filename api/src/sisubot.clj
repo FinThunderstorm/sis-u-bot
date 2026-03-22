@@ -33,9 +33,9 @@
   )
 
 (defn generate-answer [question]
-  (if (re-find #"courses" question) generate-courses-answer (
-        if (re-find #"where" question) generate-where-answer (
-           if (re-find #"evaluated" question) generate-evaluated-answer generate-unknown-answer
+  (if (re-find #"courses" question) (generate-courses-answer) (
+        if (re-find #"where" question) (generate-where-answer) (
+           if (re-find #"evaluated" question) (generate-evaluated-answer) (generate-unknown-answer)
              ))
     )
   )
