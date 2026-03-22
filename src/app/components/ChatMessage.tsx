@@ -6,7 +6,7 @@ import {Message} from "@/app/contexts/ChatContext";
 
 export const ChatMessage = ({message: m, loading}: { message: Message, loading?: boolean }) => {
     return <section
-        className={`${m.actor === "user" ? "self-end bg-cyan-100 ps-4 pe-2" : "self-start bg-gray-100 ps-2 pe-4"} py-4 rounded-lg max-w-(--message-width) overflow-y-auto`}
+        className={`${m.actor === "user" ? "self-end bg-cyan-100 ps-4 pe-2" : "self-start bg-gray-100 ps-2 pe-4"} py-4 rounded-lg max-w-(--message-width) shrink-0 overflow-y-auto`}
     >
         <div className="flex flex-row gap-3 items-center">
             {m.actor === "bot" &&
