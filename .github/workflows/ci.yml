@@ -16,8 +16,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shards: [ 1, 2, 3, 4, 5 ]
-        total_shards: [ 5 ]
+        shards: [ 1 ]
+        total_shards: [ 1 ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6.0.2
