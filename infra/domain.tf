@@ -58,7 +58,7 @@ resource "aws_acm_certificate_validation" "api_acm_validation" {
 
 resource "cloudflare_record" "sisubot" {
   zone_id = data.cloudflare_zone.alanendev.id
-  name    = "sis-u-bot"
+  name    = var.domain_name
   value   = aws_cloudfront_distribution.app.domain_name
   type    = "CNAME"
   proxied = false
@@ -66,7 +66,7 @@ resource "cloudflare_record" "sisubot" {
 
 resource "cloudflare_record" "sisubot_api" {
   zone_id = data.cloudflare_zone.alanendev.id
-  name    = "api.sis-u-bot"
+  name    = var.api_domain_name
   value   = aws_cloudfront_distribution.api.domain_name
   type    = "CNAME"
   proxied = false

@@ -1,8 +1,8 @@
 resource "aws_s3_bucket" "app" {
-  bucket = "${var.domain_name}.${var.base_domain_name}-bucket"
+  bucket = replace("${var.domain_name}.${var.base_domain_name}-content-bucket", "/\\W/", "-")
   tags = {
     Environment = var.environment
-    Name        = "${var.domain_name}.${var.base_domain_name}-bucket"
+    Name        = "${var.domain_name}.${var.base_domain_name}-content-bucket"
   }
 }
 
@@ -40,7 +40,7 @@ resource "aws_s3_bucket_versioning" "app_versioning" {
 }
 
 resource "aws_s3_bucket" "logs" {
-  bucket = "${var.domain_name}.${var.base_domain_name}-cf-logs-bucket"
+  bucket = replace("${var.domain_name}.${var.base_domain_name}-cf-logs-bucket", "/\\W/", "-")
   tags = {
     Environment = var.environment
     Name        = "${var.domain_name}.${var.base_domain_name}-cf-logs-bucket"

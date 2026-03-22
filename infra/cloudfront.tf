@@ -1,7 +1,7 @@
 
 locals {
-  api_origin_id = "${var.api_domain_name}-${var.base_domain_name}-origin-id"
-  s3_origin_id = "${var.domain_name}-${var.base_domain_name}-origin-id"
+  api_origin_id = replace("${var.api_domain_name}.${var.base_domain_name}-origin-id", "/\\W/", "-")
+  s3_origin_id = replace("${var.domain_name}.${var.base_domain_name}-origin-id", "/\\W/", "-")
 }
 
 resource "aws_cloudfront_origin_access_identity" "app" {
@@ -26,7 +26,7 @@ resource "aws_cloudfront_distribution" "app" {
   logging_config {
     include_cookies = false
     bucket          = aws_s3_bucket.logs.bucket_domain_name
-    prefix          = "${var.domain_name}-${var.base_domain_name}-cf"
+    prefix          = replace("${var.domain_name}.${var.base_domain_name}-cf", "/\\W/", "-")
   }
 
   aliases = ["${var.domain_name}.${var.base_domain_name}"]
@@ -94,7 +94,7 @@ resource "aws_cloudfront_distribution" "api" {
   logging_config {
     include_cookies = false
     bucket          = aws_s3_bucket.logs.bucket_domain_name
-    prefix          = "${var.api_domain_name}-${var.base_domain_name}-cf"
+    prefix          = replace("${var.api_domain_name}.${var.base_domain_name}-cf", "/\\W/", "-")
   }
 
   aliases = ["${var.api_domain_name}.${var.base_domain_name}"]
