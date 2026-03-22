@@ -27,7 +27,7 @@ function main {
 
   echo ::group::Deploy the application
   pushd "$repository/infra"
-  tofu apply -input=false -auto-approve
+  tofu destroy -input=false -auto-approve
   popd
   echo ::endgroup::
   }
