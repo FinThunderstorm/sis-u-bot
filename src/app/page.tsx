@@ -49,12 +49,57 @@ const startMessages: Message[] = [
     },
 ] as const
 
+const Circle = () => (
+    <svg className="size-4  motion-safe:animate-bounce text-black " xmlns="http://www.w3.org/2000/svg"
+         viewBox="0 0 16 16">
+        <circle className="opacity-100" cx="8" cy="8" r="6" stroke="currentColor"
+                strokeWidth="3"></circle>
+    </svg>
+)
+
+const ChatMessage = ({message: m, loading}: { message: Message, loading?: boolean }) => {
+    return <div
+        className={`${m.actor === "user" ? "self-end bg-cyan-100 p-4 rounded-lg" : "self-start bg-gray-100 p-4 rounded-lg"}`}
+    >
+        <div className="flex flex-row gap-8 items-center">
+            {m.actor === "bot" &&
+                <AcademicCapIcon className="h-12 bg-white p-2 rounded-full self-start"/>}
+            {loading &&
+                <div className="flex flex-row gap-2 ">
+                    <Circle/>
+                    <Circle/>
+                    <Circle/>
+                </div>}
+            {m.actor === "user" ? <span>{m.message}</span> :
+                <div className="flex flex-col gap-4">
+                    <Markdown remarkPlugins={[remarkGfm]} components={{
+                        table(props) {
+                            const {node, children, ...rest} = props
+                            return <table className="table-auto border" {...rest}>{children}</table>
+                        },
+                        th(props) {
+                            const {node, children, ...rest} = props
+                            return <th className="border px-4 py-2" {...rest}>{children}</th>
+                        },
+                        td(props) {
+                            const {node, children, ...rest} = props
+                            return <td className="border px-4 py-2" {...rest}>{children}</td>
+                        }
+                    }}>{m.message}</Markdown></div>}
+            {m.actor === "user" &&
+                <UserIcon className="h-12 bg-white p-2 rounded-full self-start"/>}
+        </div>
+    </div>
+}
+
 const Page = () => {
     const [message, setMessage] = useState<string>("")
     const [loading, setLoading] = useState<boolean>(false)
     const [messages, setMessages] = useState<Message[]>(startMessages)
 
     const handleAsk = async (): Promise<void> => {
+        if (!message || loading) return
+
         setMessages((prevMessages) => [...prevMessages, {actor: "user", message: message}])
         setLoading(true)
         const response = await ask(message)
@@ -67,41 +112,16 @@ const Page = () => {
 
     return (
         <div className="flex min-h-screen justify-center items-center">
-            <div className="flex flex-col gap-2 bg-white text-black min-w-1/2 min-h-1/2 max-h-full">
+            <div className="flex flex-col gap-2 bg-white text-black min-w-1/2 min-h-1/2 p-2">
                 <div className="flex flex-col gap-2 px-4 py-2 overflow-auto">
                     {messages.map((m, i) => (
-                        <div
-                            key={`message-${i}`}
-                            className={`${m.actor === "user" ? "self-end bg-cyan-100 p-4 rounded-lg" : "self-start bg-gray-200 p-4 rounded-lg"}`}
-                        >
-                            <div className="flex flex-row gap-8 items-center">
-                                {m.actor === "bot" &&
-                                    <AcademicCapIcon className="h-12 bg-white p-2 rounded-full self-start"/>}
-                                {m.actor === "user" ? <span>{m.message}</span> :
-                                    <div className="flex flex-col gap-4">
-                                        <Markdown remarkPlugins={[remarkGfm]} components={{
-                                            table(props) {
-                                                const {node, children, ...rest} = props
-                                                return <table className="table-auto border" {...rest}>{children}</table>
-                                            },
-                                            th(props) {
-                                                const {node, children, ...rest} = props
-                                                return <th className="border px-4 py-2" {...rest}>{children}</th>
-                                            },
-                                            td(props) {
-                                                const {node, children, ...rest} = props
-                                                return <td className="border px-4 py-2" {...rest}>{children}</td>
-                                            }
-                                        }}>{m.message}</Markdown></div>}
-                                {m.actor === "user" &&
-                                    <UserIcon className="h-12 bg-white p-2 rounded-full self-start"/>}
-                            </div>
-                        </div>
+                        <ChatMessage message={m} key={`message-${i}`}/>
                     ))}
+                    {loading && <ChatMessage message={{actor: "bot", message: ""}} loading={true}/>}
                 </div>
-                <div className="flex flex-row gap-1">
+                <div className="flex flex-row gap-2 p-2">
                     <input
-                        placeholder="Type here"
+                        placeholder="Type your question here"
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         onKeyDown={(e) => {
@@ -109,13 +129,14 @@ const Page = () => {
                                 handleAsk()
                             }
                         }}
-                        className="w-full p-2 border-cyan-400"
+                        className="w-full p-2 border-3 border-cyan-100 rounded-lg"
                     />
                     <button
-                        className="p-2 "
+                        className="p-2 bg-cyan-100 rounded-lg"
                         onClick={handleAsk}
+                        disabled={loading}
                     >
-                        {loading ? "loading" : "send"}
+                        Send
                     </button>
                 </div>
             </div>
