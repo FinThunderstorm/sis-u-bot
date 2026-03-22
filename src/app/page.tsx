@@ -94,11 +94,16 @@ const ChatMessage = ({message: m, loading}: { message: Message, loading?: boolea
 
 const Page = () => {
     const [message, setMessage] = useState<string>("")
-    const [loading, setLoading] = useState<boolean>(false)
     const [messages, setMessages] = useState<Message[]>(startMessages)
+    const [loading, setLoading] = useState<boolean>(false)
+    const [error, setError] = useState<string>("")
 
     const handleAsk = async (): Promise<void> => {
-        if (!message || loading) return
+        if (!message) {
+            setError("Please input your message")
+            return
+        }
+        if (loading) return
 
         setMessages((prevMessages) => [...prevMessages, {actor: "user", message: message}])
         setLoading(true)
@@ -119,20 +124,25 @@ const Page = () => {
                     ))}
                     {loading && <ChatMessage message={{actor: "bot", message: ""}} loading={true}/>}
                 </div>
-                <div className="flex flex-row gap-2 p-2">
-                    <input
+                <div className="flex flex-row gap-2 p-2 items-start">
+                    <div className="flex flex-col w-full"><input
                         placeholder="Type your question here"
                         value={message}
-                        onChange={(e) => setMessage(e.target.value)}
+                        onChange={(e) => {
+                            setError("")
+                            setMessage(e.target.value)
+                        }}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
                                 handleAsk()
                             }
                         }}
-                        className="w-full p-2 border-3 border-cyan-100 rounded-lg"
+                        className={`p-2 border-3 ${error ? "border-orange-600" : "border-blue-700"} rounded-lg`}
                     />
+                        {error && <span className="text-orange-600 text-sm px-2">{error}</span>}
+                    </div>
                     <button
-                        className="p-2 bg-cyan-100 rounded-lg"
+                        className=" p-2.5 bg-blue-700 text-white rounded-lg"
                         onClick={handleAsk}
                         disabled={loading}
                     >
