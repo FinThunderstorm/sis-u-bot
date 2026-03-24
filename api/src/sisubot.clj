@@ -35,12 +35,12 @@
   (str "I did not understand your question, please rephrase your question and try again."))
 
 (defn generate-answer [question]
-  (if (re-find #"slow" question) (Thread/sleep 2000))
-  (if (re-find #"courses" question)
+  (if (re-find #"(?i)slow" question) (Thread/sleep 2000))
+  (if (re-find #"(?i)courses" question)
     (map-answer-body (generate-courses-answer) true)
-    (if (re-find #"where" question)
+    (if (re-find #"(?i)where" question)
       (map-answer-body (generate-where-answer) true)
-      (if (re-find #"evaluated" question)
+      (if (re-find #"(?i)evaluated" question)
         (map-answer-body (generate-evaluated-answer) true)
         (map-answer-body (generate-unknown-answer) false)))))
 
